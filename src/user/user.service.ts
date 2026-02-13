@@ -6,7 +6,6 @@ export interface FrontUser {
   id: number;
   username: string;
   email: string;
-  friends: number[];
 }
 
 @Injectable()
@@ -19,9 +18,6 @@ export class UserService {
       id: u.id,
       username: u.name,
       email: u.email,
-      friends: [],
-      wins: u.wins,
-      loses: u.loses,
     }));
   }
 
@@ -32,7 +28,6 @@ export class UserService {
       id: u.id,
       username: u.name,
       email: u.email,
-      friends: [],
     };
   }
 }

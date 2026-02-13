@@ -28,7 +28,7 @@ export class AuthController {
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { accessToken, refreshToken, user } =
+    const { accessToken, refreshToken, userData } =
       await this.authService.login(dto);
 
     res.cookie('refreshToken', refreshToken, {
@@ -37,8 +37,7 @@ export class AuthController {
       path: '/auth/refresh',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-
-    return { accessToken, user };
+    return { accessToken, userData };
   }
 
   @Post('refresh')
@@ -58,7 +57,7 @@ export class AuthController {
     const {
       accessToken,
       refreshToken: newRefreshToken,
-      user,
+      userData,
     } = await this.authService.refreshTokens(payload.sub, refreshToken);
 
     res.cookie('refreshToken', newRefreshToken, {
@@ -68,7 +67,7 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return { accessToken, user };
+    return { accessToken, userData };
   }
   @Post('logout')
   @UseGuards(JwtAuthGuard)

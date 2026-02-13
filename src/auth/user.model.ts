@@ -39,18 +39,4 @@ export class User extends Model<User, UserCreationAttrs> {
     allowNull: true,
   })
   declare refreshToken: string | null;
-
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-    defaultValue: 0,
-  })
-  declare wins: number;
-
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-    defaultValue: 0,
-  })
-  declare loses: number;
 }

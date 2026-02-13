@@ -10,6 +10,7 @@ import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
+import {AuthUserResponse} from "./types";
 
 @Injectable()
 export class AuthService {
@@ -33,7 +34,7 @@ export class AuthService {
     };
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto):Promise<AuthUserResponse> {
     const user = await this.userModel.findOne({ where: { email: dto.email } });
     if (!user) throw new BadRequestException('User not found');
 
@@ -61,11 +62,11 @@ export class AuthService {
     });
 
     await user.update({ refreshToken });
-
-    return { accessToken, refreshToken, user };
+    const { password, refreshToken: rt, ...userData } = user.get({ plain: true });
+    return { accessToken, refreshToken, userData };
   }
 
-  async refreshTokens(userId: number, refreshToken: string) {
+  async refreshTokens(userId: number, refreshToken: string):Promise<AuthUserResponse> {
     const user = await this.userModel.findByPk(userId);
     if (!user || user.refreshToken !== refreshToken)
       throw new UnauthorizedException('Invalid refresh token');
@@ -90,8 +91,8 @@ export class AuthService {
     });
 
     await user.update({ refreshToken: newRefreshToken });
-
-    return { accessToken, refreshToken: newRefreshToken, user };
+    const { password, refreshToken: rt, ...userData } = user.get({ plain: true });
+    return { accessToken, refreshToken: newRefreshToken, userData };
   }
 
   verifyRefreshToken(token: string): { sub: number; email: string } {
