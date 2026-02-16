@@ -4,6 +4,7 @@ import { SequelizeModule, SequelizeModuleOptions } from '@nestjs/sequelize';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/user.model';
 import { UserModule } from './user/user.module';
+import {GamesModule} from "./games/games.module";
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UserModule } from './user/user.module';
         logging: console.log,
       }),
     }),
+      GamesModule,
     AuthModule,
     UserModule,
   ],
