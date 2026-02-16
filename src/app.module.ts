@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './auth/user.model';
 import { UserModule } from './user/user.module';
 import {GamesModule} from "./games/games.module";
+import {GameResult} from "./games/games-result.model";
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import {GamesModule} from "./games/games.module";
         password: configService.get<string>('DATABASE_PASSWORD') || '',
 
         database: configService.get<string>('DATABASE_NAME') || 'postgres',
-        models: [User],
+        models: [User, GameResult],
         autoLoadModels: true,
         synchronize: true,
         logging: console.log,
